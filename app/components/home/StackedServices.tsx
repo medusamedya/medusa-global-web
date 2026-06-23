@@ -121,7 +121,16 @@ export default function StackedServices() {
       className="relative w-full h-screen bg-[var(--bg-base)] text-[var(--text-main)] flex flex-col justify-center transition-colors duration-500"
     >
       <div className="max-w-[1200px] w-full mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
-        
+        <div className="group relative inline-flex items-center justify-center gap-2.5 px-5 py-2 rounded-full border border-[var(--brand-purple)]/20 dark:border-[var(--brand-gold)]/20 bg-[var(--brand-purple)]/5 dark:bg-[var(--brand-gold)]/5 backdrop-blur-md transition-all duration-500 hover:bg-[var(--brand-purple)]/10 dark:hover:bg-[var(--brand-gold)]/10 hover:border-[var(--brand-purple)]/40 dark:hover:border-[var(--brand-gold)]/40 mb-6 cursor-default shadow-[0_0_15px_rgba(92,6,140,0.05)] dark:shadow-[0_0_15px_rgba(201,169,126,0.05)] overflow-hidden">
+  
+            {/* Metin - Krem Temada Mor, Dark Temada Gold */}
+            <span className="text-[var(--brand-purple)] dark:text-[var(--brand-gold)] text-[11px] font-bold tracking-[0.25em] uppercase mt-[1px] relative z-10 transition-colors duration-500">
+                Hızlandırma
+            </span>
+
+            {/* Hover anında içten geçen Krem/Gold Işık Yansıması */}
+            <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-[var(--brand-cream)]/20 dark:via-[var(--brand-gold)]/20 to-transparent pointer-events-none z-0"></div>
+            </div>
         {/* Üst Kısım: Başlık ve Açıklama */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-20 mb-12 items-start">
           <h2 className="flex-1 text-[clamp(2.2rem,4vw,4rem)] font-medium leading-[1.05] tracking-tight">

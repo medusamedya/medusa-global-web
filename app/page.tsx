@@ -6,6 +6,8 @@ import ServicesCarousel from "./components/home/ServicesCarousel";
 import StackedServices from "./components/home/StackedServices";
 import Faq from "./components/home/Faq";
 import WorkflowOrbit from "./components/home/WorkflowOrbit";
+import FinalCta from "./components/home/FinalCta";
+import Footer from "./components/layout/Footer";
 
 
 export default function Home() {
@@ -30,6 +32,8 @@ export default function Home() {
       <StackedServices />
       <WorkflowOrbit />
       <Faq />
+      <FinalCta />
+      <Footer />
       
 
     </main>

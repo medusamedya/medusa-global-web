@@ -55,129 +55,124 @@ export default function PremiumWorkflow() {
     offset: ["start center", "end 90%"],
   });
 
-  // Fiziksel bir akış hissi için Spring efekti
+  // Fiziksel ve pürüzsüz bir akış hissi için Spring
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
 
   // Animasyonu iki faza ayırıyoruz:
-  // 1. Faz (0 -> 0.85): Ana çizgi sol dışarıdan gelir, merkeze iner.
-  // 2. Faz (0.85 -> 1.0): Çizginin ucu tam merkeze ulaştığında, M harfi çizilmeye başlar. (Bütünlük hissi)
+  // 1. Faz (0 -> 0.85): Ana çizgi sol kenardan yılan gibi süzülür, en altta merkeze kıvrılır.
+  // 2. Faz (0.85 -> 1.0): Çizginin ucu tam merkeze ulaştığında, "M" harfi çizilmeye başlar.
   const lineProgress = useTransform(smoothProgress, [0, 0.85], [0, 1]);
   const mProgress = useTransform(smoothProgress, [0.85, 1], [0, 1]);
 
   return (
-    <section 
-      ref={containerRef} 
-      // Görseldeki premium krem/papirüs tonları ve özel magenta/mor marka rengi
-      className="relative w-full py-32 overflow-hidden bg-[#F4F1EA]"
-      style={{
-        '--brand-purple': '#6A2B86', 
-        '--text-main': '#333333',
-        '--border-color': 'rgba(106, 43, 134, 0.12)' 
-      } as React.CSSProperties}
+    <section
+      ref={containerRef}
+      className="relative w-full py-32 overflow-hidden bg-[var(--bg-base)] transition-colors duration-500"
     >
       
-      {/* --- FİBER ÇİZGİ KATMANI (Sol Ekran Kenarından Merkeze) --- */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+      {/* --- TEK PARÇA YILAN ÇİZGİSİ KATMANI --- */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
         <svg
           className="w-full h-full"
           preserveAspectRatio="none"
           viewBox="0 0 100 100"
           fill="none"
         >
-          {/* Sönük Kılavuz Çizgisi */}
-          <path
-            d="M 0 10 L 8 10 Q 10 10, 10 12 L 10 90 Q 10 92, 12 92 L 50 92"
-            className="stroke-[var(--border-color)]"
-            strokeWidth="2"
-            vectorEffect="non-scaling-stroke"
-          />
-          {/* Canlı Kaydırma Çizgisi */}
           <motion.path
-            d="M 0 10 L 8 10 Q 10 10, 10 12 L 10 90 Q 10 92, 12 92 L 50 92"
-            className="stroke-[var(--brand-purple)]"
+            // M 5 0: Sol üstten %5 boşlukla başla
+            // C 10 20, 2 40, 5 60: Yazılara çarpmadan (max %10) hafif yılan kıvrımı (S) çiz
+            // C 8 80, 20 92, 50 92: En alta gelince sağa (merkeze) doğru mükemmel bir kavis yap
+            d="M 5 0 C 10 20, 2 40, 5 60 C 8 80, 20 92, 50 92"
+            className="stroke-[var(--brand-purple)] dark:stroke-[var(--brand-gold)] "
             strokeWidth="2"
             strokeLinecap="round"
-            vectorEffect="non-scaling-stroke"
-            style={{ pathLength: lineProgress }}
+            initial={{ pathLength: 0 }}
+            style={{ pathLength: lineProgress }} // Çizgi kaydırdıkça uzar
           />
         </svg>
       </div>
 
       {/* --- "M" İMZA & SARKAÇ SİSTEMİ --- */}
-      {/* Mükemmel Mühendislik: Bu div'in sol-üst (0,0) noktası, ana çizginin (50, 92) noktasıyla MİLİMETRİK kesişir. 
-        M harfinin çizimi (0,0)'dan başladığı için tek ve kesintisiz bir ip gibi görünür. 
-      */}
       <motion.div
-        className="absolute w-12 h-12 pointer-events-auto cursor-pointer z-20"
+        className="absolute w-16 h-16 pointer-events-auto cursor-pointer z-50"
         style={{
           left: "50%",
           top: "92%",
-          transformOrigin: "0px 0px" // Mafsal noktası: Sarkaç tam çizgiye bağlandığı yerden sallanır!
+          transformOrigin: "0px 0px" // Mafsal noktası tam 50,92 (Çizginin ucunun bittiği yer)
         }}
         whileHover={{
           rotate: [0, 18, -12, 8, -4, 2, 0], // Fiziksel Sönümleyici (Pendulum) Efekti
           transition: { duration: 1.5, ease: "easeInOut" }
         }}
       >
-        <svg 
-          viewBox="0 0 40 40" 
-          className="w-10 h-10 text-[var(--brand-purple)] overflow-visible"
+        <svg
+          viewBox="0 0 40 40"
+          className="w-16 h-16 text-[var(--brand-purple)] dark:text-[var(--brand-gold)] overflow-visible transition-colors duration-500"
         >
           <motion.path
-            // Çizim rotası: Sol-üstten başlar, aşağı iner, geri yukarı çıkıp M'yi çizer.
             d="M 0 0 L 0 32 L 0 0 L 16 20 L 32 0 L 32 32"
             stroke="currentColor"
             strokeWidth="2"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
-            style={{ pathLength: mProgress }} // Çizgi geldikten sonra M çizilmeye başlar
+            style={{ pathLength: mProgress }} // Çizgi geldikten sonra harf çizilir
           />
         </svg>
       </motion.div>
 
+      {/* --- ANA İÇERİK (Minimalist Liste Dizilimi) --- */}
+      {/* Sol boşluğu (pl-[15%]) yılan çizgisine yer bırakmak için koruyoruz */}
+      <div className="relative z-10 max-w-[1400px] mx-auto pl-[15%] md:pl-[12%] pr-[5%] md:pr-[8%] pb-16">
+        <div className="group relative inline-flex items-center justify-center gap-2.5 px-5 py-2 rounded-full border border-[var(--brand-purple)]/20 dark:border-[var(--brand-gold)]/20 bg-[var(--brand-purple)]/5 dark:bg-[var(--brand-gold)]/5 backdrop-blur-md transition-all duration-500 hover:bg-[var(--brand-purple)]/10 dark:hover:bg-[var(--brand-gold)]/10 hover:border-[var(--brand-purple)]/40 dark:hover:border-[var(--brand-gold)]/40 mb-6 cursor-default shadow-[0_0_15px_rgba(92,6,140,0.05)] dark:shadow-[0_0_15px_rgba(201,169,126,0.05)] overflow-hidden">
+  
+            {/* Metin - Krem Temada Mor, Dark Temada Gold */}
+            <span className="text-[var(--brand-purple)] dark:text-[var(--brand-gold)] text-[11px] font-bold tracking-[0.25em] uppercase mt-[1px] relative z-10 transition-colors duration-500">
+                5 Adımda Büyüme
+            </span>
 
-      {/* --- ANA İÇERİK (Görseldeki Minimalist Liste Dizilimi) --- */}
-      <div className="relative z-10 max-w-[1400px] mx-auto pl-[15%] md:pl-[12%] pr-[5%] md:pr-[8%]">
-        <div className="flex flex-col w-full border-t border-[var(--border-color)]">
+            {/* Hover anında içten geçen Krem/Gold Işık Yansıması */}
+            <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-[var(--brand-cream)]/20 dark:via-[var(--brand-gold)]/20 to-transparent pointer-events-none z-0"></div>
+            </div>
+        <div className="flex flex-col w-full border-t border-[var(--border-color)] transition-colors duration-500">
           {workflowData.map((item) => (
-            <div 
-              key={item.id} 
-              className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 py-10 md:py-14 border-b border-[var(--border-color)] group hover:bg-white/20 transition-colors duration-500"
+            <div
+              key={item.id}
+              className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 py-10 md:py-14 border-b border-[var(--border-color)] group hover:bg-[var(--text-main)]/5 transition-all duration-500"
             >
               
               {/* Numara Alanı */}
               <div className="md:col-span-1 flex items-start mt-1">
-                <span className="font-mono text-[var(--brand-purple)] font-bold tracking-widest text-sm">
+                <span className="font-mono text-[var(--brand-purple)] dark:text-[var(--brand-gold)] font-bold tracking-widest text-sm drop-shadow-sm transition-colors duration-500">
                   {item.id}
                 </span>
               </div>
 
               {/* Başlık Alanı */}
               <div className="md:col-span-3">
-                <h3 className="font-serif italic text-3xl md:text-4xl text-[var(--brand-purple)] tracking-wide">
+                <h3 className="font-serif italic text-3xl md:text-4xl text-[var(--brand-purple)] dark:text-[var(--brand-gold)] tracking-wide drop-shadow-sm transition-colors duration-500">
                   {item.title}
                 </h3>
               </div>
 
               {/* Açıklama Alanı */}
               <div className="md:col-span-5 flex items-center">
-                <p className="text-[var(--text-main)] text-[15px] md:text-[16px] leading-relaxed opacity-85 font-medium">
+                <p className="text-[var(--text-main)] text-[15px] md:text-[16px] leading-relaxed opacity-85 font-light transition-colors duration-500">
                   {item.desc}
                 </p>
               </div>
 
               {/* Çıktı / Süre Alanı */}
-              <div className="md:col-span-3 flex flex-col items-start md:items-end justify-center gap-1 mt-4 md:mt-0">
+              <div className="md:col-span-3 flex flex-col items-start md:items-end justify-center gap-1.5 mt-4 md:mt-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500 text-[10px] uppercase tracking-[0.2em]">
+                  <span className="text-[var(--text-muted)] text-[10px] uppercase tracking-[0.2em] transition-colors duration-500">
                     {item.durationLabel}:
                   </span>
-                  <span className="text-gray-600 text-[11px] font-mono tracking-wider">
+                  <span className="text-[var(--text-main)] opacity-80 text-[11px] font-mono tracking-wider transition-colors duration-500">
                     {item.duration}
                   </span>
                 </div>
-                <div className="text-[var(--brand-purple)] text-[11px] font-bold tracking-[0.15em] uppercase">
+                <div className="text-[var(--brand-purple)] dark:text-[var(--brand-gold)] text-[11px] font-bold tracking-[0.15em] uppercase transition-colors duration-500">
                   {item.output}
                 </div>
               </div>

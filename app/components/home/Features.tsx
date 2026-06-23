@@ -1,6 +1,8 @@
 "use client";
 
+import { useRef } from "react";
 import { Mouse, Activity, Target, Zap, Headphones } from "lucide-react";
+import { motion, useScroll, useSpring } from "framer-motion";
 
 const features = [
   {
@@ -26,8 +28,22 @@ const features = [
 ];
 
 export default function Features() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Scroll takibini kuruyoruz (Section ekrana girince çizim başlar, ortalanınca biter)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 80%", "center center"],
+  });
+
+  // Çizimin pürüzsüz ve fiziksel bir akışla gelmesi için Spring efekti
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
+
   return (
-    <section className="relative w-full py-24 bg-[var(--bg-base)] overflow-hidden text-[var(--text-main)] transition-colors duration-500">
+    <section 
+      ref={containerRef} 
+      className="relative w-full py-24 bg-[var(--bg-base)] overflow-hidden text-[var(--text-main)] transition-colors duration-500"
+    >
       {/* Arka Plan Glow Efekti (Krem temada hafif, dark temada belirgin) */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] max-w-[1000px] h-[300px] bg-[var(--brand-purple)] opacity-10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -40,7 +56,7 @@ export default function Features() {
           </div>
         </div>
 
-        {/* Dağılan Kesik Çizgiler (SVG) */}
+        {/* Dağılan Kesik Çizgiler (SVG) - AnİMASYON BURAYA EKLENDİ */}
         <div className="hidden md:block absolute top-[52px] left-0 w-full h-[100px] pointer-events-none z-0">
           <svg
             className="w-full h-full"
@@ -48,10 +64,38 @@ export default function Features() {
             preserveAspectRatio="none"
             fill="none"
           >
-            <path d="M 500 0 C 500 50, 125 40, 125 100" stroke="url(#line-gradient)" strokeWidth="1.5" strokeDasharray="4 4" />
-            <path d="M 500 0 C 500 60, 375 50, 375 100" stroke="url(#line-gradient)" strokeWidth="1.5" strokeDasharray="4 4" />
-            <path d="M 500 0 C 500 60, 625 50, 625 100" stroke="url(#line-gradient)" strokeWidth="1.5" strokeDasharray="4 4" />
-            <path d="M 500 0 C 500 50, 875 40, 875 100" stroke="url(#line-gradient)" strokeWidth="1.5" strokeDasharray="4 4" />
+            <motion.path 
+              d="M 500 0 C 500 50, 125 40, 125 100" 
+              stroke="url(#line-gradient)" 
+              strokeWidth="1.5" 
+              strokeDasharray="4 4" 
+              initial={{ pathLength: 0 }}
+              style={{ pathLength: smoothProgress }}
+            />
+            <motion.path 
+              d="M 500 0 C 500 60, 375 50, 375 100" 
+              stroke="url(#line-gradient)" 
+              strokeWidth="1.5" 
+              strokeDasharray="4 4" 
+              initial={{ pathLength: 0 }}
+              style={{ pathLength: smoothProgress }}
+            />
+            <motion.path 
+              d="M 500 0 C 500 60, 625 50, 625 100" 
+              stroke="url(#line-gradient)" 
+              strokeWidth="1.5" 
+              strokeDasharray="4 4" 
+              initial={{ pathLength: 0 }}
+              style={{ pathLength: smoothProgress }}
+            />
+            <motion.path 
+              d="M 500 0 C 500 50, 875 40, 875 100" 
+              stroke="url(#line-gradient)" 
+              strokeWidth="1.5" 
+              strokeDasharray="4 4" 
+              initial={{ pathLength: 0 }}
+              style={{ pathLength: smoothProgress }}
+            />
             
             {/* SVG Gradienti CSS değişkenlerine bağlandı */}
             <defs>
@@ -72,7 +116,6 @@ export default function Features() {
               <div 
                 className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:-translate-y-2 relative overflow-hidden border"
                 style={{
-                  /* Arka planı mor ve temanın ana zemin rengi arasında bağlıyoruz */
                   background: 'linear-gradient(135deg, var(--brand-purple) 0%, var(--bg-base) 100%)',
                   borderColor: 'var(--brand-gold)',
                   boxShadow: '0 8px 32px rgba(92, 6, 140, 0.15)'

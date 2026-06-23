@@ -39,10 +39,16 @@ export default function Faq() {
         
         {/* Başlık Alanı */}
         <div className="flex flex-col items-center text-center mb-16">
-          {/* FAQ Badge */}
-          <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-[var(--brand-purple)] bg-[var(--brand-purple)]/10 text-[var(--text-main)] text-[13px] font-medium tracking-widest mb-6">
-            FAQ
-          </div>
+          <div className="group relative inline-flex items-center justify-center gap-2.5 px-5 py-2 rounded-full border border-[var(--brand-purple)]/20 dark:border-[var(--brand-gold)]/20 bg-[var(--brand-purple)]/5 dark:bg-[var(--brand-gold)]/5 backdrop-blur-md transition-all duration-500 hover:bg-[var(--brand-purple)]/10 dark:hover:bg-[var(--brand-gold)]/10 hover:border-[var(--brand-purple)]/40 dark:hover:border-[var(--brand-gold)]/40 mb-6 cursor-default shadow-[0_0_15px_rgba(92,6,140,0.05)] dark:shadow-[0_0_15px_rgba(201,169,126,0.05)] overflow-hidden">
+  
+            {/* Metin - Krem Temada Mor, Dark Temada Gold */}
+            <span className="text-[var(--brand-purple)] dark:text-[var(--brand-gold)] text-[11px] font-bold tracking-[0.25em] uppercase mt-[1px] relative z-10 transition-colors duration-500">
+                Faq
+            </span>
+
+            {/* Hover anında içten geçen Krem/Gold Işık Yansıması */}
+            <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-[var(--brand-cream)]/20 dark:via-[var(--brand-gold)]/20 to-transparent pointer-events-none z-0"></div>
+            </div>
           
           <h2 className="text-4xl sm:text-5xl font-medium tracking-tight mb-6">
             Still have questions?
