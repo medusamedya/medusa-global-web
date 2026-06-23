@@ -2,6 +2,10 @@ import Header from "./components/layout/Header";
 import Hero from "./components/home/Hero";
 import Features from "./components/home/Features";
 import DetailedFeatures from "./components/home/DetailedFeatures";
+import ServicesCarousel from "./components/home/ServicesCarousel";
+import StackedServices from "./components/home/StackedServices";
+import Faq from "./components/home/Faq";
+import WorkflowOrbit from "./components/home/WorkflowOrbit";
 
 
 export default function Home() {
@@ -22,6 +26,11 @@ export default function Home() {
       <Hero />
       <Features />
       <DetailedFeatures />
+      <ServicesCarousel />
+      <StackedServices />
+      <WorkflowOrbit />
+      <Faq />
+      
 
     </main>
   );

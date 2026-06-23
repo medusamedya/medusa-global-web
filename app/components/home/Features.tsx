@@ -27,16 +27,16 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="relative w-full py-24 bg-[#08020F] overflow-hidden text-white">
-      {/* Arka Plan Glow Efekti (Yukarıdan vuran mor/krem ışık) */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] max-w-[1000px] h-[300px] bg-[var(--medusa-purple)] opacity-20 blur-[120px] rounded-full pointer-events-none" />
+    <section className="relative w-full py-24 bg-[var(--bg-base)] overflow-hidden text-[var(--text-main)] transition-colors duration-500">
+      {/* Arka Plan Glow Efekti (Krem temada hafif, dark temada belirgin) */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] max-w-[1000px] h-[300px] bg-[var(--brand-purple)] opacity-10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative max-w-[1200px] mx-auto px-6 lg:px-8">
         
         {/* Üst Merkez İkon (Mouse) */}
         <div className="flex justify-center mb-8">
-          <div className="w-10 h-10 rounded-full border border-white/10 bg-black/40 backdrop-blur-sm flex items-center justify-center z-10">
-            <Mouse className="w-5 h-5 text-[var(--medusa-cream)]" />
+          <div className="w-10 h-10 rounded-full border border-[var(--border-color)] bg-[var(--bg-base)]/50 backdrop-blur-sm flex items-center justify-center z-10 transition-colors duration-500">
+            <Mouse className="w-5 h-5 text-[var(--text-muted)]" />
           </div>
         </div>
 
@@ -48,40 +48,16 @@ export default function Features() {
             preserveAspectRatio="none"
             fill="none"
           >
-            {/* 1. Çizgi */}
-            <path
-              d="M 500 0 C 500 50, 125 40, 125 100"
-              stroke="url(#line-gradient)"
-              strokeWidth="1.5"
-              strokeDasharray="4 4"
-            />
-            {/* 2. Çizgi */}
-            <path
-              d="M 500 0 C 500 60, 375 50, 375 100"
-              stroke="url(#line-gradient)"
-              strokeWidth="1.5"
-              strokeDasharray="4 4"
-            />
-            {/* 3. Çizgi */}
-            <path
-              d="M 500 0 C 500 60, 625 50, 625 100"
-              stroke="url(#line-gradient)"
-              strokeWidth="1.5"
-              strokeDasharray="4 4"
-            />
-            {/* 4. Çizgi */}
-            <path
-              d="M 500 0 C 500 50, 875 40, 875 100"
-              stroke="url(#line-gradient)"
-              strokeWidth="1.5"
-              strokeDasharray="4 4"
-            />
+            <path d="M 500 0 C 500 50, 125 40, 125 100" stroke="url(#line-gradient)" strokeWidth="1.5" strokeDasharray="4 4" />
+            <path d="M 500 0 C 500 60, 375 50, 375 100" stroke="url(#line-gradient)" strokeWidth="1.5" strokeDasharray="4 4" />
+            <path d="M 500 0 C 500 60, 625 50, 625 100" stroke="url(#line-gradient)" strokeWidth="1.5" strokeDasharray="4 4" />
+            <path d="M 500 0 C 500 50, 875 40, 875 100" stroke="url(#line-gradient)" strokeWidth="1.5" strokeDasharray="4 4" />
             
-            {/* Çizgilerin uçlarında kaybolması için gradient maske */}
+            {/* SVG Gradienti CSS değişkenlerine bağlandı */}
             <defs>
               <linearGradient id="line-gradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="rgba(255, 255, 255, 0.2)" />
-                <stop offset="100%" stopColor="rgba(255, 255, 255, 0.05)" />
+                <stop offset="0%" stopColor="var(--text-main)" stopOpacity="0.15" />
+                <stop offset="100%" stopColor="var(--text-main)" stopOpacity="0.02" />
               </linearGradient>
             </defs>
           </svg>
@@ -92,28 +68,31 @@ export default function Features() {
           {features.map((feature, index) => (
             <div key={index} className="flex flex-col items-center text-center group">
               
-              {/* İkon Kutusu - Gradient Arka Plan ve Yeni Renkler */}
+              {/* Dinamik İkon Kutusu */}
               <div 
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:-translate-y-2 relative overflow-hidden"
+                className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:-translate-y-2 relative overflow-hidden border"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(92, 6, 140, 0.8) 0%, rgba(20, 5, 30, 0.9) 100%)', // Medusa Purple kullanımı
-                  border: '1px solid rgba(201, 169, 126, 0.3)', // Medusa Gold kullanımı
-                  boxShadow: '0 8px 32px rgba(92, 6, 140, 0.2)'
+                  /* Arka planı mor ve temanın ana zemin rengi arasında bağlıyoruz */
+                  background: 'linear-gradient(135deg, var(--brand-purple) 0%, var(--bg-base) 100%)',
+                  borderColor: 'var(--brand-gold)',
+                  boxShadow: '0 8px 32px rgba(92, 6, 140, 0.15)'
                 }}
               >
-                {/* İkonun arkasındaki hafif parlama (Krem Highlight) */}
+                {/* Hover Parlaması */}
                 <div 
                   className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500"
-                  style={{ background: 'var(--medusa-cream)' }}
+                  style={{ background: 'var(--brand-spark)' }}
                 />
-                <feature.icon className="w-6 h-6" style={{ color: 'var(--medusa-cream)' }} />
+                
+                {/* İkon Rengi Tema İle Değişir, Hoverda Spark (Sarı) Olur */}
+                <feature.icon className="w-6 h-6 text-[var(--text-main)] group-hover:text-[var(--brand-spark)] transition-colors duration-300 relative z-10" />
               </div>
 
               {/* İçerik */}
-              <h3 className="text-[17px] font-medium text-white mb-3 tracking-wide">
+              <h3 className="text-[17px] font-medium text-[var(--text-main)] mb-3 tracking-wide transition-colors duration-500">
                 {feature.title}
               </h3>
-              <p className="text-[14px] text-gray-400 leading-relaxed font-light px-2">
+              <p className="text-[14px] text-[var(--text-muted)] leading-relaxed font-light px-2 transition-colors duration-500">
                 {feature.description}
               </p>
             </div>
